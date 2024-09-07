@@ -30,6 +30,11 @@ on how he went about doing this, his intentions were noble.
 
 #### Start serving requests
 
+Run dev
+```sh
+go run . --config=example-julien.yaml --site=example/index.md
+```
+
 Run julien
 ```sh
 julien --config=julien.yaml --site=index.md
