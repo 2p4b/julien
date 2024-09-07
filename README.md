@@ -1,15 +1,3 @@
----
-title: Share your Idea with the World
-name: Julien
-url: http://localhost:1234
-lang: en-US
-theme: light
-description: Julien NoCMS application for your next site, no subscription needed
-keywords: 
-    - NoCMS
-    - CMS
-    - Flat File
----
 Julien, "NoCMS" built for folks like you and me. It gets the job done without any headache. 
 
 #### Why create yet another cms?
