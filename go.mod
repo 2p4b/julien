@@ -1,6 +1,6 @@
 module julien
 
-go 1.22.3
+go 1.23
 
 require (
 	github.com/extemporalgenome/slug v0.0.0-20150414033109-0320c85e32e0
