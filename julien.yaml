@@ -1,0 +1,26 @@
+static: 
+    path: example/static
+
+content:
+    ext: "md"
+    path: "example/content"
+    index: "index"
+    driver: "yaml-md"
+    asserts: [png, jpg, jpeg, gif]
+
+data: 
+    ext: "md"
+    path: "example/data"
+    index: "index"
+    driver: "yaml-md"
+
+forms: 
+    ext: "md"
+    path: "example/forms"
+    index: "index"
+    driver: "yaml-md"
+
+template: 
+    path: example/templates
+    name: julien
+    

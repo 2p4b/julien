@@ -1,0 +1,11 @@
+go.sum
+
+# Ignore node_modules for the specific template
+.vscode/
+example/data/
+example/templates/julien/node_modules/
+
+# Ignore yarn-related files for the specific template
+example/templates/julien/.yarn/
+example/templates/julien/yarn.lock
+example/templates/julien/package-lock.json

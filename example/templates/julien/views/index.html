@@ -1,0 +1,73 @@
+<div class="flex-1 flex flex-col justify-between">
+    <div class="flex flex-col">
+        <div class="flex justify-center items-center">
+            <image src="/static/julien-logo.png" alt="julien nocms" class="w-28 h-28 md:w-40 md:h-40"/>
+        </div>
+        <div class="flex flex-col px-8 md:px-32 py-8">
+            <div class="flex flex-col items-center">
+                <h1 class="font-black text-3xl md:text-7xl text-center max-w-[900px]">
+                    {{ Page.Get("title") }}
+                </h1>
+            </div>
+            <div class="flex flex-col items-center py-8 md:py-12">
+                <a href="{{Pager.Open('articles/king-julien').Path()}}" class="font-semibold text-gray-700 text-lg md:text-xl text-center">
+                    {{ Page.Get("call_to_action") }}
+                </a>
+            </div>
+            {% if Post.Form.Name() == "sign-up" %}
+            <div class="flex flex-col items-center pb-8 md:pb-12">
+                <span class="font-black text-gray-100 text-lg md:text-xl text-center bg-green-500 rounded-full px-4">
+                    {{ Post.Data.Get("email") }}
+                </span>
+                <span class="font-semibold text-gray-700 text-lg md:text-xl text-center pt-4">
+                    Thanks for subscribing to our newsletter
+                </span>
+            </div>
+            {% else %}
+            <form class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:justify-center items-center space-x-4" method="POST" action="/sign-up">
+                <input class="rounded-full border-2 px-4 py-2 border-gray-900" placeholder="Email Newsletter" name="email"/>
+                <button class="rounded-full bg-gray-900 text-white px-8 py-2 font-black" type="submit">
+                    Subscribe
+                </button>
+            </form>
+            {% endif %}
+            <div class="flex flex-col md:flex-row justify-center space-y-8 md:space-y-0 md:space-x-4 py-16">
+                {% for SubPage in Pager.Open("plans").Collection().SortBy("maturity").Entries() %}
+                    <a href="{{Pager.Open('articles/king-julien').Path()}}"  class="flex py-4 flex-col w-full md:w-60 bg-{{SubPage.Get('color', 'red')}}-500 rounded-lg"> 
+                        <div class="px-4">
+                            <span class="font-black text-gray-200 text-xs">
+                                {{ SubPage.Get("plan") | uppercase }}
+                            </span>
+                        </div>
+                        <div class="px-4">
+                            <span class="font-black text-gray-900 text-md">
+                                {{ SubPage.Get("title") }}
+                            </span>
+                        </div>
+                        <div class="p-4 h-28">
+                            <span class="text-gray-800 text-base">
+                                {{ SubPage.Body() | markdown }}
+                            </span>
+                        </div>
+                        <div class="h-[1px] bg-gray-400 rounded-md"></div>
+                        <div class="px-4 pt-4 pb-2">
+                            <span class="text-gray-300 text-sm font-black">
+                                {{ SubPage.Get("maturity") }} Yrs
+                            </span>
+                        </div>
+                        <div class="px-4 flex-row justify-between items-center">
+                            <span class="text-gray-900 text-xl font-black">
+                                {{ SubPage.Get("ireturns") | floatformat:2 }} %
+                            </span>
+                        </div>
+                    </a>
+                {% endfor  %}
+            </div>
+            {% if false %}
+            <div class="bg-red-500 bg-green-500 bg-pink-500 bg-blue-500">
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% include "partials/footer.html" %}
+</div>
