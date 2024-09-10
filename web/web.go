@@ -24,7 +24,6 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/csrf"
 	"github.com/gofiber/fiber/v2/middleware/idempotency"
-	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/gofiber/fiber/v2/middleware/session"
@@ -386,11 +385,6 @@ func (web *Web) Start(addr string) {
 
 	app.Use(idempotency.New())
 	app.Use(cors.New())
-	app.Use(limiter.New(limiter.Config{
-		Max:        60,
-		Expiration: 5,
-	}))
-
 	app.Use(csrf.New(csrf.Config{
 		KeyLookup:         "cookie:csrf",
 		CookieName:        "csrf",
