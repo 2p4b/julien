@@ -1,4 +1,3 @@
-go.sum
 
 # Ignore node_modules for the specific template
 .vscode/
