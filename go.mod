@@ -18,8 +18,6 @@ require (
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
-	github.com/kr/pretty v0.2.1 // indirect
-	github.com/kr/text v0.1.0 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/philhofer/fwd v1.1.2 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
@@ -32,14 +30,10 @@ require (
 
 require (
 	github.com/andybalholm/brotli v1.1.0 // indirect
-	github.com/fatih/color v1.10.0 // indirect
 	github.com/flosch/pongo2/v6 v6.0.0
-	github.com/fsnotify/fsnotify v1.7.0
 	github.com/go-playground/validator/v10 v10.22.0
 	github.com/go-yaml/yaml v2.1.0+incompatible
-	github.com/goccy/go-yaml v1.11.3 // indirect
 	github.com/gofiber/fiber/v2 v2.52.5
-	github.com/gofiber/fiber/v3 v3.0.0-beta.3 // indirect
 	github.com/gofiber/template v1.8.3 // indirect
 	github.com/gofiber/template/html/v2 v2.1.2
 	github.com/gofiber/template/jet/v2 v2.1.10
@@ -57,5 +51,4 @@ require (
 	github.com/valyala/fasthttp v1.55.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	golang.org/x/sys v0.21.0 // indirect
-	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 )
