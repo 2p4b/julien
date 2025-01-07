@@ -120,12 +120,10 @@ func (c *Collection) SortBy(key string, order ...string) *Collection {
 		avalue := aval.Get(key)
 		bvalue := bval.Get(key)
 
-		atype := reflect.TypeOf(avalue).String()
-		btype := reflect.TypeOf(bvalue).String()
-
-		if atype != btype {
+		if reflect.ValueOf(avalue).Kind() != reflect.ValueOf(bvalue).Kind() {
 			return false
-		}
+        }
+
 		sorder := "asc"
 		if len(order) > 0 {
 			sorder = order[0]
