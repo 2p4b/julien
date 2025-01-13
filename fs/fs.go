@@ -212,6 +212,7 @@ func (disk *Disk) Find(filepath string) (*Entry, error) {
 
 	// Check if file exist
 	if err != nil {
+
 		// File with ext not found
 		if ext != "" {
 			return nil, err
@@ -224,6 +225,7 @@ func (disk *Disk) Find(filepath string) (*Entry, error) {
 		if err != nil {
 			return nil, err
 		}
+
 		// Reject directory with extension
 		// not something i feel like will be usefull
 		if fileinfo.IsDir() {
@@ -234,32 +236,7 @@ func (disk *Disk) Find(filepath string) (*Entry, error) {
 		filepath = index_path
 	}
 
-	if fileinfo.IsDir() {
-		// Check dir for index file
-		if filepath == "." {
-			index_path = disk.index + "." + disk.ext
-		} else {
-			index_path = path.Join(filepath, disk.index+"."+disk.ext)
-		}
-		_, err := fs.Stat(disk.fs, index_path)
-
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	file, err := disk.fs.Open(filepath)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	info, err := file.Stat()
-	if err != nil {
-		return nil, err
-	}
-
-	dentry := disk.create_entry(info, filepath)
+	dentry := disk.create_entry(fileinfo, filepath)
 
 	return &dentry, nil
 }

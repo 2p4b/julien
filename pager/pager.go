@@ -1,6 +1,7 @@
 package pager
 
 import (
+    "errors"
 	"julien/contract"
 	"julien/fs"
 	"path"
@@ -11,6 +12,7 @@ var EMPTY_PAGES = make([]*Page, 0)
 
 type Page struct {
 	meta     map[string]interface{}
+    indexed  bool
 	body     string
 	entry    *fs.Entry
 	root     *Root
@@ -30,6 +32,18 @@ func Init(disk *fs.Disk, driver contract.Driver) Root {
 }
 
 func (root *Root) create_entry_page(entry *fs.Entry) (*Page, error) {
+    if entry.IsDir() && !entry.IsIndexed() {
+        page := Page{
+            meta:     make(map[string]interface{}),
+            body:       "",
+            indexed:  false,
+            entry:    entry,
+            root:     root,
+            extended: make(map[interface{}]interface{}),
+        }
+        return &page, nil
+    }
+
 	raw, err := entry.Read()
 	if err != nil {
 		return nil, err
@@ -43,6 +57,7 @@ func (root *Root) create_entry_page(entry *fs.Entry) (*Page, error) {
 	page := Page{
 		meta:     *frontmatter,
 		body:     body,
+        indexed:  true,
 		entry:    entry,
 		root:     root,
 		extended: make(map[interface{}]interface{}),
@@ -122,7 +137,7 @@ func (root *Root) Dump(ppath string, content []byte) (*Page, error) {
 }
 
 func (page *Page) Name() string {
-	return strings.Trim(page.entry.Name(), page.Ext())
+	return page.entry.Name()
 }
 
 func (page *Page) Body(body ...string) string {
@@ -180,7 +195,7 @@ func (page *Page) Path() string {
 		}
 		return ppath
 	}
-	return strings.TrimRight(epath, "."+page.Ext())
+	return strings.TrimSuffix(epath, "."+page.Ext())
 }
 
 func (page *Page) APath() string {
@@ -270,6 +285,9 @@ func (page *Page) Dump() ([]byte, error) {
 }
 
 func (page *Page) Save() error {
+    if !page.Indexed() {
+        return errors.New("[Save] Page is not indexed")
+    }
 	bytes, err := page.Dump()
 	if err != nil {
 		return err
@@ -287,6 +305,20 @@ func (page *Page) IsDir() bool {
 
 func (page *Page) IsFile() bool {
 	return page.entry.IsFile()
+}
+
+func (page *Page) Indexed() bool {
+    return page.indexed 
+}
+
+func (page *Page) Published() bool {
+    if page.Indexed() {
+        value, ok := page.Get("publish").(bool)
+        if ok {
+            return value
+        }
+    }
+    return page.indexed
 }
 
 func (page *Page) IsRootIndex() bool {
@@ -315,6 +347,7 @@ func (page *Page) GetStringValueSpecOrNameRecusive(key string) string {
 	if !page.IsRootIndex() {
 		dirpath := path.Dir(page.Path())
 		dirpage, err := page.root.Find(dirpath)
+
 		if err != nil {
 			return page.Name()
 		}
@@ -326,10 +359,13 @@ func (page *Page) GetStringValueSpecOrNameRecusive(key string) string {
 				return specvalue
 			}
 		}
+
 		keval, ok := dirpage.Get(key).(string)
 		if ok {
 			return keval
 		}
+
+        return dirpage.GetStringValueSpecOrNameRecusive(key)
 	}
 
 	return page.Name()
@@ -343,3 +379,4 @@ func (page *Page) View() string {
 func (page *Page) Layout() string {
 	return page.GetStringValueSpecOrNameRecusive("layout")
 }
+

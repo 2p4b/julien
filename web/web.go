@@ -193,6 +193,10 @@ func render(web *Web, ctx *fiber.Ctx, name string) error {
 		}
 	}
 
+    if !page.Published() {
+        return render(web, ctx, "404")
+    }
+
 	// Reroute index to parent dir
 	if page.IsIndex() {
 		return ctx.Redirect("/"+page.Path(), 302)
