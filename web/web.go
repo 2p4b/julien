@@ -8,7 +8,7 @@ import (
 	"julien/fs"
 	"julien/julien"
 	"julien/pager"
-	"julien/template"
+	"julien/theme"
 	jutils "julien/utils"
 	"net/url"
 	"os"
@@ -59,7 +59,7 @@ type Web struct {
 	site     *julien.Site
 	forms    *form.Root
 	content  *pager.Root
-	template *template.Template
+	theme 	 *theme.Theme
 }
 
 func SaveSession(sess *session.Session) {
@@ -231,7 +231,7 @@ func render(web *Web, ctx *fiber.Ctx, name string) error {
 		"Forms":    forms,
 		"Pager":    content,
 		"FormData": formdata,
-		"Template": web.Template(),
+		"Theme":  	web.Theme(),
 	}
 
 	postedstr, ok := sess.Get(POST_KEY).(string)
@@ -266,8 +266,8 @@ func render(web *Web, ctx *fiber.Ctx, name string) error {
 	sess.Delete(POST_KEY)
 	SaveSession(sess)
 
-	view = path.Clean(path.Join(web.template.GetString(VIEWS_KEY, VIEWS_KEY), view))
-	layout = path.Clean(path.Join(web.template.GetString(LAYOUTS_KEY, LAYOUTS_KEY), layout))
+	view = path.Clean(path.Join(web.theme.GetString(VIEWS_KEY, VIEWS_KEY), view))
+	layout = path.Clean(path.Join(web.theme.GetString(LAYOUTS_KEY, LAYOUTS_KEY), layout))
 
 	if (code < 400 || code > 451) && (code < 500 || code > 511) {
 		return ctx.Render(view, vparams, layout)
@@ -300,7 +300,7 @@ func New(config *julien.Julien, site *julien.Site) Web {
 	Forms := config.Forms
 	Content := config.Content
 
-	tmpl, err := template.Find(config.TemplatePath())
+	tmpl, err := theme.Find(config.ThemePath())
 	if err != nil {
 		log.Error(err)
 		panic(err)
@@ -317,7 +317,7 @@ func New(config *julien.Julien, site *julien.Site) Web {
 		forms:    &forms,
 		content:  &content,
 		site:     site,
-		template: tmpl,
+		theme:    tmpl,
 	}
 }
 
@@ -344,24 +344,24 @@ func (web *Web) Logger() func(*fiber.Ctx) error {
 	return logger.New(config)
 }
 
-func (web *Web) Template() *template.Template {
-	return web.template
+func (web *Web) Theme() *theme.Theme{
+	return web.theme
 }
 
 func (web *Web) Session(ctx *fiber.Ctx) (*session.Session, error) {
 	return web.store.Get(ctx)
 }
 
-func (web *Web) TemplateName() string {
-	return web.config.TemplateName()
+func (web *Web) ThemeName() string {
+	return web.config.ThemeName()
 }
 
-func (web *Web) TemplatePath() string {
-	return web.template.Path
+func (web *Web) ThemePath() string {
+	return web.theme.Path
 }
 
-func (web *Web) TemplateExt() string {
-	return web.template.GetString("ext", "html")
+func (web *Web) ThemeExt() string {
+	return web.theme.GetString("ext", "html")
 }
 
 func (web *Web) FormsPath() string {
@@ -384,7 +384,7 @@ func (web *Web) Start(addr string) {
 
 	var app = fiber.New(fiber.Config{
 		AppName: "Julien",
-		Views:   web.template.Engine(true),
+		Views:   web.theme.Engine(true),
 	})
 
 	app.Use(idempotency.New())
@@ -409,7 +409,7 @@ func (web *Web) Start(addr string) {
 		CacheDuration: 24 * 60 * 60 * time.Second,
 	})
 
-	app.Static("/public", web.TemplatePath()+"/public")
+	app.Static("/public", web.ThemePath()+"/public")
 
 	app.Get("/metrics", monitor.New())
 

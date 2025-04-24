@@ -35,7 +35,7 @@ type Meta struct {
 	Content  string `yaml:"content"`
 }
 
-type Template struct {
+type Theme struct {
 	Path string `yaml:"path"`
 	Name string `yaml:"name"`
 }
@@ -44,7 +44,7 @@ type Julien struct {
 	Data     MountPoint  `yaml:"data"`
 	Forms    MountPoint  `yaml:"forms"`
 	Content  MountPoint  `yaml:"content"`
-	Template Template    `yaml:"template"`
+	Theme    Theme 		 `yaml:"themes"`
 	Static   StaticMount `yaml:"static"`
 	Logger   Logger      `yaml:"logger"`
 }
@@ -65,12 +65,12 @@ func (j *Julien) StaticPath() string {
 	return j.Static.Path
 }
 
-func (j *Julien) TemplatePath() string {
-	return path.Join(j.Template.Path, j.Template.Name)
+func (j *Julien) ThemePath() string {
+	return path.Join(j.Theme.Path, j.Theme.Name)
 }
 
-func (j *Julien) TemplateName() string {
-	return j.Template.Name
+func (j *Julien) ThemeName() string {
+	return j.Theme.Name
 }
 
 func (j *Julien) ContentAssets() []string {
@@ -85,8 +85,8 @@ func DefaultSite() Site {
 	}
 }
 
-func CreateDefaultTemplate(path string) Template {
-	return Template{
+func CreateDefaultTheme(path string) Theme{
+	return Theme {
 		Name: "julien",
 		Path: path,
 	}
@@ -113,7 +113,7 @@ func DefaultJulien() Julien {
 		Data:     CreateDefaultMount("data"),
 		Forms:    CreateDefaultMount("forms"),
 		Content:  CreateDefaultMount("content"),
-		Template: CreateDefaultTemplate("templates"),
+		Theme:    CreateDefaultTheme("themes"),
 		Static:   CreateStaticMount("static"),
 		Logger:   Logger{Format: "[${ip}]:${method} ${path} - ${status}"},
 	}

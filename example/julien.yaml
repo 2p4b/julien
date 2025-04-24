@@ -1,26 +1,26 @@
 static: 
-    path: static
+    path: example/static
 
 content:
     ext: "md"
-    path: "content"
+    path: "example/content"
     index: "index"
     driver: "yaml-md"
     asserts: [png, jpg, jpeg, gif]
 
 data: 
     ext: "md"
-    path: "data"
+    path: "example/data"
     index: "index"
     driver: "yaml-md"
 
 forms: 
     ext: "md"
-    path: "forms"
+    path: "example/forms"
     index: "index"
     driver: "yaml-md"
 
-template: 
-    path: templates
+themes: 
+    path: example/themes
     name: julien
     
