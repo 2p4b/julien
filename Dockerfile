@@ -10,7 +10,7 @@ COPY web /julien/web
 COPY pager /julien/pager
 COPY utils /julien/utils
 COPY julien /julien/julien
-COPY template /julien/template
+COPY themes /julien/themes
 COPY main.go /julien/main.go
 
 # pre-copy/cache go.mod for pre-downloading dependencies and only redownloading them in subsequent builds if they change
