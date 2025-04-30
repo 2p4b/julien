@@ -95,7 +95,7 @@ func IncludeData(ctx *fiber.Ctx, form form.Form, data map[string]interface{}) ma
 		case "hostname":
 			data[strkey] = ctx.Hostname()
 
-		case "User-Agent", "Referer":
+		default:
 			data[strkey] = ctx.Get(strfield, "")
 		}
 	}
