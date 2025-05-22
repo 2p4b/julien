@@ -331,6 +331,15 @@ func (page *Page) IsRootIndex() bool {
 
 }
 
+func (page *Page) Parent() *Page {
+	dirpath := path.Dir(page.Path())
+	parent, err := page.root.Find(dirpath)
+	if err != nil {
+		return nil
+	}
+	return parent;
+}
+
 func (page *Page) GetStringValueSpecOrNameRecusive(key string) string {
 	value, ok := page.Get(key).(string)
 	if ok {
